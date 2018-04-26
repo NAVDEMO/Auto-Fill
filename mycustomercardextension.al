@@ -6,7 +6,10 @@ pageextension 50100 MyCustomerCardExtension extends "Customer Card"
         {
             trigger OnAfterValidate()
             begin
-                if Name.EndsWith('.com') or Name.EndsWith('.dk') or Name.EndsWith('.net') then begin
+                if Name.EndsWith('.com') or 
+                   Name.EndsWith('.dk') or 
+                   Name.EndsWith('.de') or 
+                   Name.EndsWith('.net') then begin
                     if Confirm('Do you want to collect information about the company associated with ' + Name) then begin
                         LookupAddressInfo();
                     end;
