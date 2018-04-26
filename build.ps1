@@ -25,7 +25,7 @@ New-NavContainer -accept_eula `
                  -myScripts @(@{'MainLoop.ps1' = 'while ($true) { start-sleep -seconds 10 }'})
 
 Write-Host -ForegroundColor Green "Build started"
-Compile-AppInNavContainer -containerName $containerName -credential $credential -appProjectFolder $appProjectFolder
+Compile-AppInNavContainer -containerName $containerName -credential $credential -appProjectFolder $appProjectFolder -UpdateSymbols
 
 Write-Host "Remove Container"
 #Remove-NavContainer -containerName $containerName
