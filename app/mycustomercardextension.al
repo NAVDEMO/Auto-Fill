@@ -9,6 +9,7 @@ pageextension 50100 MyCustomerCardExtension extends "Customer Card"
                 if Name.EndsWith('.com') or 
                    Name.EndsWith('.dk') or 
                    Name.EndsWith('.de') or 
+                   Name.EndsWith('.nl') or 
                    Name.EndsWith('.net') then begin
                     if Confirm('Do you want to collect information about the company associated with ' + Name) then begin
                         LookupAddressInfo();
