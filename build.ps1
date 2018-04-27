@@ -6,7 +6,8 @@ if (Test-Path -Path $localrepo) {
     Install-Module NavContainerHelper -force
 }
 
-$appProjectFolder = $PSScriptRoot
+$appProjectFolder = Join-Path $PSScriptRoot "app"
+$testProjectFolder = Join-Path $PSScriptRoot "test"
 $agentFolder = $appProjectFolder.Substring(0,$appProjectFolder.IndexOf('\',3))
 
 $imageName = "microsoft/bcsandbox"
