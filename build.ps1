@@ -7,11 +7,19 @@ if (Test-Path -Path $localrepo) {
 }
 
 $appProjectFolder = Join-Path $PSScriptRoot "app"
-$testProjectFolder = Join-Path $PSScriptRoot "test"
+$appJsonObject = Get-Content -Raw -Path "$appProjectFolder\app.json" | ConvertFrom-Json
+$appName = $appJsonObject.Name
+$appFile = "$appProjectFolder\output\$($appJsonObject.Publisher)_$($appJsonObject.Name)_$($appJsonObject.Version).app"
+
+$testAppProjectFolder = Join-Path $PSScriptRoot "test"
+$testAppJsonObject = Get-Content -Raw -Path "$testAppProjectFolder\app.json" | ConvertFrom-Json
+$testAppName = $testAppJsonObject.Name
+$testAppFile = "$testAppProjectFolder\output\$($testAppJsonObject.Publisher)_$($testAppJsonObject.Name)_$($testAppJsonObject.Version).app"
+
 $agentFolder = $appProjectFolder.Substring(0,$appProjectFolder.IndexOf('\',3))
 
-$imageName = "microsoft/bcsandbox"
-$containerName = "compiler"
+$imageName = "microsoft/bcsandbox:us"
+$containerName = $appName
 $credential = [PSCredential]::new("admin", (ConvertTo-SecureString -String "P@ssword1" -AsPlainText -Force))
 New-NavContainer -accept_eula `
                  -accept_outdated `
@@ -25,11 +33,23 @@ New-NavContainer -accept_eula `
                  -additionalParameters @("--volume ""${agentFolder}:c:\source""", "--env httpSite=N", "--env WebClient=N") `
                  -myScripts @(@{'MainLoop.ps1' = 'while ($true) { start-sleep -seconds 10 }'})
 
-Write-Host -ForegroundColor Green "Build started"
+Write-Host -ForegroundColor Green "Build app"
 Compile-AppInNavContainer -containerName $containerName -credential $credential -appProjectFolder $appProjectFolder -UpdateSymbols
 
-Write-Host "Remove Container"
+Write-Host -ForegroundColor Green "Publish and install app"
+Publish-NavContainerApp -containerName $containerName -appFile $appFile -skipVerification -sync -install
+
+Write-Host -ForegroundColor Green "Build test app"
+Compile-AppInNavContainer -containerName $containerName -credential $credential -appProjectFolder $testAppProjectFolder -UpdateSymbols
+
+Write-Host -ForegroundColor Green "Publish and install test app"
+Publish-NavContainerApp -containerName $containerName -appFile $testAppFile -skipVerification -sync -install
+
+Write-Host -ForegroundColor Green "UnInstall and UnPublish app"
+#UnPublish-NavContainerApp -containerName $containerName -appName $appName -unInstall
+
+Write-Host -ForegroundColor Green "Remove Container"
 #Remove-NavContainer -containerName $containerName
 
-Write-Host "Remove unused images"
+Write-Host -ForegroundColor Green "Remove unused images"
 #docker system prune -f

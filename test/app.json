@@ -1,0 +1,29 @@
+{
+  "id": "fcd44078-e66f-4e2e-bd9a-ad7e46d64276",
+  "name": "Auto-fill test",
+  "publisher": "Freddy Kristiansen",
+  "brief": "",
+  "description": "",
+  "version": "1.0.0.0",
+  "privacyStatement": "",
+  "EULA": "",
+  "help": "",
+  "url": "",
+  "logo": "",
+  "capabilities": [],
+  "dependencies": [
+      {
+        "publisher": "Freddy Kristiansen",
+        "name": "Auto-fill",
+        "version": "1.0.0.0",
+        "appId": "f36095bd-f64e-4b19-b23f-0efd761b5277"
+      }
+  ],
+  "screenshots": [],
+  "platform": "12.0.0.0",
+  "application": "12.0.0.0",
+  "idRange": {
+    "from": 50100,
+    "to": 50149
+  }
+}
